@@ -1,0 +1,31 @@
+version: 1
+frontend:
+    phases:
+        preBuild:
+            commands:
+                - 'bun install'
+                #var d'environnement
+                #récupération des variables d'environnement depuis ssm 
+                - export NEXT_PUBLIC_ELIZA_SERVER_AUTH_TOKEN=$(aws ssm get-parameter --name "/amplify/shared/$AWS_APP_ID/NEXT_PUBLIC_ELIZA_SERVER_AUTH_TOKEN" --with-decryption --query "Parameter.Value" --output text) || exit 1
+                - export NEXT_PUBLIC_PRIVY_APP_ID=$(aws ssm get-parameter --name "/amplify/shared/$AWS_APP_ID/NEXT_PUBLIC_PRIVY_APP_ID" --with-decryption --query "Parameter.Value" --output text) || exit 1
+
+                - export PRIVY_APP_ID=$(aws ssm get-parameter --name "/amplify/shared/$AWS_APP_ID/PRIVY_APP_ID" --with-decryption --query "Parameter.Value" --output text) || exit 1
+                - export PRIVY_APP_SECRET=$(aws ssm get-parameter --name "/amplify/shared/$AWS_APP_ID/PRIVY_APP_SECRET" --with-decryption --query "Parameter.Value" --output text) || exit 1
+                #écriture des variables d'environnement dans le fichier .env
+                - echo "NEXT_PUBLIC_ELIZA_SERVER_AUTH_TOKEN=$NEXT_PUBLIC_ELIZA_SERVER_AUTH_TOKEN" >> .env
+                - echo "NEXT_PUBLIC_PRIVY_APP_ID=$NEXT_PUBLIC_PRIVY_APP_ID" >> .env
+                - echo "PRIVY_APP_ID=$PRIVY_APP_ID" >> .env
+                - echo "PRIVY_APP_SECRET=$PRIVY_APP_SECRET" >> .env
+                
+                - echo "NEXT_PUBLIC_ELIZA_SERVER_URL=$NEXT_PUBLIC_ELIZA_SERVER_URL" >> .env       
+        build:
+            commands:
+                - 'bun run build'
+    artifacts:
+        baseDirectory: .next
+        files:
+            - '**/*'
+    cache:
+        paths:
+            - '.next/cache/**/*'
+            - 'node_modules/**/*'

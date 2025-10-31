@@ -44,5 +44,19 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
 # Snyk Security Extension - AI Rules (auto-generated)
 .cursor/rules/snyk_rules.mdc
+
+# devcontainer
+.devcontainer
+
+# terraform
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+terraform.tfvars.backup
+terraform.tfvars.backup.backup
+terraform.tfvars.backup.backup.backup
