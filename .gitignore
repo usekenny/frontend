@@ -60,3 +60,7 @@ terraform.tfvars
 terraform.tfvars.backup
 terraform.tfvars.backup.backup
 terraform.tfvars.backup.backup.backup
+# terraform (extended)
+*.tfvars
+**/tfvars/**
+.cloud/terraform/tfvars/**
